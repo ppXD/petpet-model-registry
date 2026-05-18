@@ -47,15 +47,16 @@ jobs:
             --diff    sync-diff.json
           # Surface counts as workflow outputs so the PR step can
           # branch on "additions only" vs "updates only" vs "mixed".
-          python3 -c '
-          import json, os
-          d = json.load(open("sync-diff.json"))
-          out = os.environ["GITHUB_OUTPUT"]
-          with open(out, "a") as f:
-              f.write(f"additions={len(d[\"additions\"])}\n")
-              f.write(f"updates={len(d[\"updates\"])}\n")
-              f.write(f"any_change={int(bool(d[\"additions\"] or d[\"updates\"]))}\n")
-          '
+          # jq is pre-installed on ubuntu runners.
+          ADDS=$(jq '.additions | length' sync-diff.json)
+          UPDS=$(jq '.updates    | length' sync-diff.json)
+          echo "additions=$ADDS"   >> "$GITHUB_OUTPUT"
+          echo "updates=$UPDS"     >> "$GITHUB_OUTPUT"
+          if [ "$ADDS" -gt 0 ] || [ "$UPDS" -gt 0 ]; then
+            echo "any_change=1"    >> "$GITHUB_OUTPUT"
+          else
+            echo "any_change=0"    >> "$GITHUB_OUTPUT"
+          fi
 
       - name: No-op if nothing changed
         if: steps.sync.outputs.any_change == '0'
