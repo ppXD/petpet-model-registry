@@ -1,0 +1,34 @@
+name: validate
+
+# Runs on every PR + push to main. Enforces the schema contract so
+# nothing mergeable can break petpet clients downstream:
+#   - models.json is valid JSON
+#   - schema_version pinned to 1
+#   - every model entry has required fields + valid enum values
+#   - no `_TODO_` placeholders left (auto-sync PRs hit this until a
+#     maintainer fills in `family`)
+#
+# Branch protection on `main` requires this job to pass before merge.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate models.json
+        run: python3 scripts/validate.py models.json

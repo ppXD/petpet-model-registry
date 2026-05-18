@@ -1,0 +1,41 @@
+name: Wrong tier classification
+description: Report a model classified into the wrong tier
+title: "Wrong tier: <model-id>"
+labels: ["wrong-tier"]
+body:
+  - type: input
+    id: model_id
+    attributes:
+      label: Model id (as in registry)
+      placeholder: claude-haiku-9-future
+    validations:
+      required: true
+
+  - type: dropdown
+    id: current_tier
+    attributes:
+      label: Current tier in registry
+      options: [frontier, mid, mini, local]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: should_be
+    attributes:
+      label: Should be
+      options: [frontier, mid, mini, local]
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: |
+        See CONTRIBUTING.md's "Tier classification rubric". Tier reflects
+        vendor positioning, not current price.
+
+        E.g. "It's positioned as flagship by Anthropic / OpenAI / Google in
+        their pricing page" or "Vendor explicitly labels it 'small' / 'fast'".
+    validations:
+      required: true

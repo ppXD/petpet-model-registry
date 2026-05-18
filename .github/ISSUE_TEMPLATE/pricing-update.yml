@@ -1,0 +1,40 @@
+name: Pricing update
+description: Report stale pricing on an existing model
+title: "Pricing update: <model-id>"
+labels: ["pricing-update"]
+body:
+  - type: input
+    id: model_id
+    attributes:
+      label: Model id (as in registry)
+      placeholder: claude-opus-4-7
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: New-price source URL
+      description: Vendor's pricing page that documents the new rate
+      placeholder: https://www.anthropic.com/pricing#api
+    validations:
+      required: true
+
+  - type: textarea
+    id: new_pricing
+    attributes:
+      label: New per-1M-token pricing
+      value: |
+        input:           $
+        output:          $
+        cache_read:      $
+        cache_creation:  $
+        reasoning:       $
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: When did the price change?
+      placeholder: e.g. "Effective 2026-05-15 per vendor blog post: <URL>"

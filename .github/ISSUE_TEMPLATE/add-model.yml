@@ -1,0 +1,72 @@
+name: Add a model
+description: Request a model be added to the registry
+title: "Add model: <vendor>/<model-name>"
+labels: ["add-model"]
+body:
+  - type: input
+    id: model_id
+    attributes:
+      label: Model identifier
+      description: As it appears in your AI tool's logs (e.g. `claude-opus-4-7`, `gpt-5`, `gemini-2.5-pro`)
+      placeholder: e.g. claude-opus-4-7
+    validations:
+      required: true
+
+  - type: dropdown
+    id: vendor
+    attributes:
+      label: Vendor
+      options:
+        - anthropic
+        - openai
+        - google
+        - deepseek
+        - meta
+        - mistral
+        - xai
+        - alibaba
+        - (other — please specify in description)
+    validations:
+      required: true
+
+  - type: input
+    id: pricing_source
+    attributes:
+      label: Pricing source URL
+      description: Link to the vendor's official pricing page where rates can be verified
+      placeholder: https://www.anthropic.com/pricing#api
+    validations:
+      required: true
+
+  - type: textarea
+    id: pricing
+    attributes:
+      label: Per-1M-token pricing
+      description: USD per 1,000,000 tokens. Zero is fine if the model doesn't expose that axis.
+      value: |
+        input:           $
+        output:          $
+        cache_read:      $
+        cache_creation:  $
+        reasoning:       $
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Proposed tier classification
+      description: See CONTRIBUTING.md's "Tier classification rubric"
+      options:
+        - frontier (vendor's flagship)
+        - mid (balanced / previous-gen)
+        - mini (cheap / instant-class)
+        - local (on-device / self-hosted)
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Any other notes
+      description: Context window, capabilities (tools/vision/reasoning), release date, deprecated, etc.
